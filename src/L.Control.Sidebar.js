@@ -1,4 +1,7 @@
 L.Control.Sidebar = L.Control.extend({
+
+    includes: L.Mixin.Events,
+ 
     options: {
         closeButton: true,
         position: 'left'
@@ -42,9 +45,10 @@ L.Control.Sidebar = L.Control.extend({
             var close = L.DomUtil.create('a', 'close', container);
             close.innerHTML = '&times;';
 
-            L.DomEvent.on(close, 'click', function () {
+            L.DomEvent.on(close, 'click', function (e) {
                 sidebar.hide();
-                L.DomEvent.stopPropagation();
+				sidebar.fire('close');
+                L.DomEvent.stopPropagation(e);
             });
         }
 
@@ -75,6 +79,7 @@ L.Control.Sidebar = L.Control.extend({
             this._map.panBy([-this.getOffset() / 2, 0], {
                 duration: 0.5
             });
+		    this.fire('show');
         }
     },
 
@@ -84,6 +89,7 @@ L.Control.Sidebar = L.Control.extend({
             this._map.panBy([this.getOffset() / 2, 0], {
                 duration: 0.5
             });
+			this.fire('hide');
         }
     },
 
